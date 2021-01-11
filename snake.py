@@ -152,8 +152,8 @@ while True:
 
     if head.distance(food) < 20:
         #move food
-        x = random.randint(-280, 280)
-        y = random.randint(-360, 280)
+        x = random.randint(-270, 270)
+        y = random.randint(-360, 270)
         food.goto(x,y)
         score += 10
         delay *= 0.98
