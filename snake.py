@@ -119,12 +119,13 @@ while True:
     if head.direction == "stop":
         start_message()
     #check collision with boarder
-    if head.xcor() > 295 or head.xcor() < -295 or head.ycor() > 295 or head.ycor() < -295:
+    if head.xcor() > 295 or head.xcor() < -295 or head.ycor() > 330 or head.ycor() < -370:
         dead_message()
         time.sleep(2)
         head.goto(0,0)
         head.direction = "stop"
-        
+        food.goto(0,100)
+        delay = 0.1
         
         for i in segments:
             i.goto(1000,1000) #deleting all the body segments
@@ -140,6 +141,8 @@ while True:
             time.sleep(2)
             head.goto(0,0)
             head.direction = "stop"
+            food.goto(0,100)
+            delay = 0.1
             for i in segments:
                 i.goto(1000,1000)
             segments.clear()
@@ -149,10 +152,11 @@ while True:
 
     if head.distance(food) < 20:
         #move food
-        x = random.randint(-290, 290)
-        y = random.randint(-290, 290)
+        x = random.randint(-280, 280)
+        y = random.randint(-360, 280)
         food.goto(x,y)
         score += 10
+        delay *= 0.98
         if score > high_score:
             high_score = score
         
