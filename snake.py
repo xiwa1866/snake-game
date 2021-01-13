@@ -11,9 +11,9 @@ delay = 0.1
 wn = turtle.Screen()
 wn.title("Snake Game Version 1")
 wn.bgcolor("green")
-wn.setup(width=600, height=800)
+wn.setup(width=600, height=600)
 wn.tracer(0)
- 
+
 
 #initializing snake head
 head = turtle.Turtle()
@@ -28,6 +28,7 @@ head.direction = "stop"
 food = turtle.Turtle()
 food.speed(0)
 food.shape("circle")
+
 food.color("red")
 food.penup()
 food.goto(0,100)
@@ -50,13 +51,22 @@ pen.write("Score: {} High Score: {}".format(score, high_score), align="center",
 font=("Courier", 24, "normal"))
 
 
-start_menu = turtle.Turtle()
-start_menu.speed(0)
-start_menu.shape("square")
-start_menu.color("white")
-start_menu.penup()
-start_menu.hideturtle()
-start_menu.goto(0,-100)
+start_menu1 = turtle.Turtle()
+start_menu1.speed(0)
+start_menu1.shape("square")
+start_menu1.color("white")
+start_menu1.penup()
+start_menu1.hideturtle()
+start_menu1.goto(0,-100)
+
+start_menu2 = turtle.Turtle()
+start_menu2.speed(0)
+start_menu2.shape("square")
+start_menu2.color("white")
+start_menu2.penup()
+start_menu2.hideturtle()
+start_menu2.goto(0,-150)
+
 
 #initialization done
 #helper functions
@@ -94,15 +104,28 @@ def dead_message():
     pen.write("You died!! We will restart", align="center", 
             font=("Courier", 18, "normal"))
 def start_message():
-    start_menu.goto(0,-100)
-    start_menu.write("Welcome to SNAKE!", align="center", font=("Courier", 22, "normal"))
-    start_menu.goto(0,-150)
-    start_menu.write("use \"W\",\"S\",\"A\",\"D\" to control the snake", align="center", font=("Courier", 15, "normal"))
-
+    start_menu1.write("Welcome to SNAKE!", align="center", font=("Courier", 22, "normal"))
+    start_menu2.write("use \"W\",\"S\",\"A\",\"D\" to control the snake", align="center", font=("Courier", 15, "normal"))
+def delay_reset():
+    if input == "1":
+        delay = 0.1
+    else:
+        delay = 0.08
+def time_decrease():
+    global delay
+    if input == "1":
+        delay *= 0.98
+    else: 
+        delay *= 0.96
 #function ends here
 
 
+#user input
+input = wn.textinput("Selecting game level", "Please select the game level. Enter \"1\" for easy/Enter \"2\" for hard" )
+while input != "1" and input != "2":
+    input = wn.textinput("Inputting Error", "The input was illegal. Please try again: Enter \"1\" for easy/Enter \"2\" for hard")
 
+delay_reset()
 
 # keyboard bindings
 wn.listen()
@@ -112,20 +135,22 @@ wn.onkeypress(left, "a")
 wn.onkeypress(right, "d")
 
 
+
 # Main game loop
 while True:
     wn.update()
-    start_menu.clear()
+    start_menu1.clear()
+    start_menu2.clear()
     if head.direction == "stop":
         start_message()
     #check collision with boarder
-    if head.xcor() > 295 or head.xcor() < -295 or head.ycor() > 330 or head.ycor() < -370:
+    if head.xcor() > 290 or head.xcor() < -290 or head.ycor() > 290 or head.ycor() < -290:
         dead_message()
         time.sleep(2)
         head.goto(0,0)
         head.direction = "stop"
         food.goto(0,100)
-        delay = 0.1
+        delay_reset()
         
         for i in segments:
             i.goto(1000,1000) #deleting all the body segments
@@ -142,24 +167,23 @@ while True:
             head.goto(0,0)
             head.direction = "stop"
             food.goto(0,100)
-            delay = 0.1
+            delay_reset()
             for i in segments:
                 i.goto(1000,1000)
             segments.clear()
             score = 0
             
             score_print()
-
+    
     if head.distance(food) < 20:
         #move food
-        x = random.randint(-270, 270)
-        y = random.randint(-360, 270)
+        x = random.randint(-280, 280)
+        y = random.randint(-280, 270)
         food.goto(x,y)
         score += 10
-        delay *= 0.98
+        time_decrease()
         if score > high_score:
             high_score = score
-        
         score_print()
 
         #add new body segment
